@@ -1,9 +1,7 @@
 # Spring Authentication
 
     Aplicação web de registro e login de usuários, usando o jwt e confirmação de e-mails do google.
-    Existe 2(duas) branches, além dessa main, que correspondem a diferentes formas de autencação de usuário.
-    A branch chamada "feat/auth-with-password" corresponde ao login de usuário com e-mail e senha.
-    Já a branch chamada "feat/auth-without-password" corresponde ao login de usuário com apenas e-mail, com finalidade de fazer login via oauth do google.
+    Essa branch corresponde ao login de usuário com apenas e-mail, com finalidade de fazer login via oauth do google.
     
 # Tecnologias usadas
 

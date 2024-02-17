@@ -1,7 +1,5 @@
 # Spring Authentication
 
-    Spring Authentication
-
     Aplicação web de registro e login de usuários, usando o jwt e confirmação 
     de e-mails do google.
     Essa branch corresponde ao login de usuário com e-mail e senha.

@@ -1,6 +1,7 @@
 # Spring Authentication
 
-    Aplicação web de registro e login de usuários, usando o jwt e confirmação de e-mails do google.
+    Aplicação web de registro e login de usuários, usando o jwt e confirmação 
+    de e-mails do google.
     Essa branch corresponde ao login de usuário com e-mail e senha.
     
 # Tecnologias usadas
@@ -16,8 +17,10 @@
     - Crie um usuário chamado postgres no Postgres SQL;
     - Altere a senha de usuário para postgres também;
     - Crie um banco de dados chamado "spring-auth";
-    - No arquivo "aplication.properties", altere o valor de "JWT_SECRET" na chave secreta para qualquer palavra que você achar secreta;
-    - No arquivo "application.properties", altere o seu username e password nas confirgurações de smtp. Veja como adicionar a senha correta do seu e-mail de envio escolhido: https://support.google.com/accounts/answer/185833
+    - No arquivo "aplication.properties", altere o valor de "JWT_SECRET" 
+    na chave secreta para qualquer palavra que você achar secreta;
+    - No arquivo "application.properties", altere o seu username e password nas confirgurações de smtp. Veja como adicionar a senha correta do seu e-mail 
+    de envio escolhido: https://support.google.com/accounts/answer/185833
 
 
 # Dependências implantadas

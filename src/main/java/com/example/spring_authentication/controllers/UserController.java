@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.spring_authentication.config.MessagesSendEmailConfig;
+import com.example.spring_authentication.models.EmailModel;
 import com.example.spring_authentication.models.User;
 import com.example.spring_authentication.repositories.UserRepository;
+import com.example.spring_authentication.services.EmailService;
 
 @RestController
 @RequestMapping("/user")
@@ -41,6 +44,9 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping("/detail/{userId}")
     public User getOneUser(@PathVariable String userId) {
         @SuppressWarnings("null")
@@ -53,14 +59,14 @@ public class UserController {
     }
 
     @SuppressWarnings("null")
-    @PatchMapping("/update/{userId}")
-    public User updateUser(@PathVariable String userId, @RequestBody User newUser) {
+    @PatchMapping("/update/by-user/{userId}")
+    public User updateUserByUser(@PathVariable String userId, @RequestBody User newUser) {
         Optional<User> user = userRepository.findById(userId);
         LocalDateTime updateTime = LocalDateTime.now();
         if (user.isPresent()) {
             User existingUser = user.get();
-            if (newUser.getPassword() != null) {
-                existingUser.setPassword(newUser.getPassword());
+            if (newUser.getName() != null) {
+                existingUser.setName(newUser.getName());
                 existingUser.setUpdated(updateTime);
             }
             return userRepository.save(existingUser);
@@ -79,6 +85,23 @@ public class UserController {
 
             if (newUser.getRole() != null) {
                 existingUser.setRole(newUser.getRole());
+            }
+
+            if (newUser.getValid() || !newUser.getValid()) {
+                existingUser.setValid(newUser.getValid());
+                MessagesSendEmailConfig message = new MessagesSendEmailConfig();
+                if (newUser.getValid()) {
+                    message.activatedAccountMessage(existingUser.getName());
+                } else {
+                    message.disabledAccountMessage(existingUser.getName());
+                }
+                EmailModel welcomeEmail = new EmailModel(message.getName(), existingUser.getEmail(),
+                        message.getSubject(),
+                        message.getText());
+                emailService.sendEmail(welcomeEmail);
+            }
+
+            if (newUser.getRole() != null || (newUser.getValid() || !newUser.getValid())) {
                 existingUser.setUpdated(updateTime);
             }
             return userRepository.save(existingUser);

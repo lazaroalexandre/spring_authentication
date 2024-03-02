@@ -26,15 +26,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/").hasAnyRole("USER")
-
+                        .requestMatchers(HttpMethod.GET, "/home/**").permitAll()
+                        
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/update/user/validate/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/user/list").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/user/list/invalid").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/user/detail/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.PATCH, "/user/update/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.PATCH, "/user/update/by-user/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.PATCH, "/user/update/by-admin/**").hasAnyRole("ADMIN")
 
                 )

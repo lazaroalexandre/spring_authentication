@@ -36,7 +36,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManeger;
 
     @Autowired
     private EmailService emailService;
@@ -44,15 +44,16 @@ public class AuthenticationController {
     @SuppressWarnings("rawtypes")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated AuthenticateDto data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        var auth = authenticationManager.authenticate(usernamePassword);
-        var user = (User) auth.getPrincipal();
-        var token = tokenService.generateToken(user);
 
-        if (user != null && user.getValid() != false) {
-            return ResponseEntity.ok(new LoginDto(token));
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.email());
+        var auth = this.authenticationManeger.authenticate(usernamePassword);
+        var usuario = (User) auth.getPrincipal();
+        var token = tokenService.generateToken(usuario);
+
+        if (usuario == null || usuario.getValid() == false) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Autenticação Inválida");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Autenticação inválida!");
+            return ResponseEntity.ok(new LoginDto(token));
         }
     }
 
@@ -62,12 +63,11 @@ public class AuthenticationController {
         if (userRepository.findByEmail(data.email()) != null) {
             return ResponseEntity.badRequest().build();
         }
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.email());
         User newUser = new User(data.name(), data.email(), encryptedPassword);
 
         userRepository.save(newUser);
         MessagesSendEmailConfig message = new MessagesSendEmailConfig();
-        System.out.println(newUser.getName() + newUser.getEmail());
         message.validateAccountMessage(
                 "http://192.168.0.18:8080/auth/update/user/validate/" + newUser.getUsuario_id(),  newUser.getName());
         EmailModel welcomeEmail = new EmailModel(message.getName(), data.email(), message.getSubject(),
@@ -84,6 +84,11 @@ public class AuthenticationController {
         existingUser.setValid(true);
         existingUser.setUpdated(updateTime);
         userRepository.save(existingUser);
+        MessagesSendEmailConfig message = new MessagesSendEmailConfig();
+        message.activatedAccountMessage(existingUser.getName());
+        EmailModel welcomeEmail = new EmailModel(message.getName(), existingUser.getEmail(), message.getSubject(),
+                message.getText());
+        emailService.sendEmail(welcomeEmail);
         return ResponseEntity.ok("Parabéns! Sua conta foi validada e você já pode fazer login no sistema.");
     }
 }

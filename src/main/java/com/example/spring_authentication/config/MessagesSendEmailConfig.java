@@ -19,7 +19,31 @@ public class MessagesSendEmailConfig {
         this.name = name;
         this.text = "Olá, " + this.name + "! Sua conta está quase concluída." +
                 "\nClique no link abaixo para validar a sua conta:"+
-                "\n" + this.link;
+                "\n" + this.link+
+                "\n\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
+                "\n\nAtenciosamente,"+
+                "\nEmpresa.";
+        return this.text;
+    }
+    
+    public String activatedAccountMessage(String name) {
+        this.subject = "Conta ativada no sistema!";
+        this.name = name;
+        this.text = "Olá, " + this.name + "! Sua conta foi aceita e ativada no sistema." +
+                "\nAgora você pode fazer login e desfrutar do que há de melhor no nosso sistema."+
+                "\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
+                "\n\nAtenciosamente,"+
+                "Empresa.";
+        return this.text;
+    }
+
+    public String disabledAccountMessage(String name) {
+        this.subject = "Conta desativada no sistema!";
+        this.name = name;
+        this.text = "Olá, " + this.name + "! Sua conta foi desativada no sistema." +
+                "\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
+                "\n\nAtenciosamente,"+
+                "Empresa.";
         return this.text;
     }
 }

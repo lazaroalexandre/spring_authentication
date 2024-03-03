@@ -33,6 +33,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/auth/update/user/validate/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/user/list").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/user/list/invalid").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/list/valid/by-admin").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/list/invalid/by-admin").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/user/detail/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.PATCH, "/user/update/by-user/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.PATCH, "/user/update/by-admin/**").hasAnyRole("ADMIN")

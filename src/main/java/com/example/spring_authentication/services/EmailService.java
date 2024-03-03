@@ -9,19 +9,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.spring_authentication.enums.StatusEmail;
-import com.example.spring_authentication.models.EmailModel;
-import com.example.spring_authentication.repositories.EmailRepository;
+import com.example.spring_authentication.models.SendEmail;
 
 @Service
 public class EmailService {
-    @Autowired
-    private EmailRepository emailRepository;
-
+    
     @Autowired
     private JavaMailSender emailSender;
 
-    @SuppressWarnings("finally")
-    public EmailModel sendEmail(EmailModel emailModel) {
+    public void sendEmail(SendEmail emailModel) {
         emailModel.setSendDateEmail(LocalDateTime.now());
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -34,8 +30,6 @@ public class EmailService {
             emailModel.setStatusEmail(StatusEmail.SEND);
         } catch (MailException e) {
             emailModel.setStatusEmail(StatusEmail.ERROR);
-        }finally{
-            return emailRepository.save(emailModel); 
         }
     }
 }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.spring_authentication.config.MessagesSendEmailConfig;
-import com.example.spring_authentication.models.EmailModel;
-import com.example.spring_authentication.models.User;
+import com.example.spring_authentication.models.SendEmail;
+import com.example.spring_authentication.models.MessagesSendEmail;
+import com.example.spring_authentication.models.UserModel;
 import com.example.spring_authentication.repositories.UserRepository;
 import com.example.spring_authentication.services.EmailService;
 
@@ -27,7 +27,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/list")
-    public List<User> getAllValidUsers() {
+    public List<UserModel> getAllValidUsers() {
         return userRepository
                 .findAll()
                 .stream()
@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/list/invalid")
-    public List<User> getAllInvalidUsers() {
+    public List<UserModel> getAllInvalidUsers() {
         return userRepository
                 .findAll()
                 .stream()
@@ -44,13 +44,31 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/list/valid/by-admin")
+    public List<UserModel> getAllValidUsersByAdmin() {
+        return userRepository
+                .findAll()
+                .stream()
+                .filter(user -> user.getValidByAdmin())
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/list/invalid/by-admin")
+    public List<UserModel> getAllInvalidUsersByAdmin() {
+        return userRepository
+                .findAll()
+                .stream()
+                .filter(user -> !user.getValidByAdmin())
+                .collect(Collectors.toList());
+    }
+
     @Autowired
     private EmailService emailService;
 
     @GetMapping("/detail/{userId}")
-    public User getOneUser(@PathVariable String userId) {
+    public UserModel getOneUser(@PathVariable String userId) {
         @SuppressWarnings("null")
-        Optional<User> user = userRepository.findById(userId);
+        Optional<UserModel> user = userRepository.findById(userId);
         if (user.isPresent()) {
             return user.get();
         } else {
@@ -60,11 +78,11 @@ public class UserController {
 
     @SuppressWarnings("null")
     @PatchMapping("/update/by-user/{userId}")
-    public User updateUserByUser(@PathVariable String userId, @RequestBody User newUser) {
-        Optional<User> user = userRepository.findById(userId);
+    public UserModel updateUserByUser(@PathVariable String userId, @RequestBody UserModel newUser) {
+        Optional<UserModel> user = userRepository.findById(userId);
         LocalDateTime updateTime = LocalDateTime.now();
         if (user.isPresent()) {
-            User existingUser = user.get();
+            UserModel existingUser = user.get();
             if (newUser.getName() != null) {
                 existingUser.setName(newUser.getName());
                 existingUser.setUpdated(updateTime);
@@ -77,25 +95,26 @@ public class UserController {
 
     @SuppressWarnings("null")
     @PatchMapping("/update/by-admin/{userId}")
-    public User updateUserByAdmin(@PathVariable String userId, @RequestBody User newUser) {
-        Optional<User> user = userRepository.findById(userId);
+    public UserModel updateUserByAdmin(@PathVariable String userId, @RequestBody UserModel newUser) {
+        Optional<UserModel> user = userRepository.findById(userId);
         LocalDateTime updateTime = LocalDateTime.now();
         if (user.isPresent()) {
-            User existingUser = user.get();
+            UserModel existingUser = user.get();
 
             if (newUser.getRole() != null) {
                 existingUser.setRole(newUser.getRole());
             }
 
-            if (newUser.getValid() || !newUser.getValid()) {
-                existingUser.setValid(newUser.getValid());
-                MessagesSendEmailConfig message = new MessagesSendEmailConfig();
+            if (newUser.getValidByAdmin() || !newUser.getValidByAdmin()) {
+                MessagesSendEmail message = new MessagesSendEmail();
                 if (newUser.getValid()) {
+                    existingUser.setValid(true);
                     message.activatedAccountMessage(existingUser.getName());
                 } else {
+                    existingUser.setValid(false);
                     message.disabledAccountMessage(existingUser.getName());
                 }
-                EmailModel welcomeEmail = new EmailModel(message.getName(), existingUser.getEmail(),
+                SendEmail welcomeEmail = new SendEmail(message.getName(), existingUser.getEmail(),
                         message.getSubject(),
                         message.getText());
                 emailService.sendEmail(welcomeEmail);

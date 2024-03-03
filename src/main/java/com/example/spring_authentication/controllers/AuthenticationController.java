@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.spring_authentication.config.MessagesSendEmailConfig;
 import com.example.spring_authentication.dto.AuthenticateDto;
 import com.example.spring_authentication.dto.LoginDto;
 import com.example.spring_authentication.dto.RegistreDto;
-import com.example.spring_authentication.models.EmailModel;
-import com.example.spring_authentication.models.User;
+import com.example.spring_authentication.models.SendEmail;
+import com.example.spring_authentication.models.MessagesSendEmail;
+import com.example.spring_authentication.models.UserModel;
 import com.example.spring_authentication.repositories.UserRepository;
 import com.example.spring_authentication.services.EmailService;
 import com.example.spring_authentication.services.TokenService;
@@ -47,7 +47,7 @@ public class AuthenticationController {
 
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.email());
         var auth = this.authenticationManeger.authenticate(usernamePassword);
-        var usuario = (User) auth.getPrincipal();
+        var usuario = (UserModel) auth.getPrincipal();
         var token = tokenService.generateToken(usuario);
 
         if (usuario == null || usuario.getValid() == false) {
@@ -64,13 +64,13 @@ public class AuthenticationController {
             return ResponseEntity.badRequest().build();
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.email());
-        User newUser = new User(data.name(), data.email(), encryptedPassword);
+        UserModel newUser = new UserModel(data.name(), data.email(), encryptedPassword);
 
         userRepository.save(newUser);
-        MessagesSendEmailConfig message = new MessagesSendEmailConfig();
+        MessagesSendEmail message = new MessagesSendEmail();
         message.validateAccountMessage(
                 "http://192.168.0.18:8080/auth/update/user/validate/" + newUser.getUsuario_id(),  newUser.getName());
-        EmailModel welcomeEmail = new EmailModel(message.getName(), data.email(), message.getSubject(),
+        SendEmail welcomeEmail = new SendEmail(message.getName(), data.email(), message.getSubject(),
                 message.getText());
         emailService.sendEmail(welcomeEmail);
         return ResponseEntity.ok().build();
@@ -80,15 +80,20 @@ public class AuthenticationController {
     @GetMapping("/update/user/validate/{userId}")
     public ResponseEntity<String> patchValidateUser(@PathVariable String userId) {
         LocalDateTime updateTime = LocalDateTime.now();
-        User existingUser = userRepository.findById(userId).get();
-        existingUser.setValid(true);
-        existingUser.setUpdated(updateTime);
-        userRepository.save(existingUser);
-        MessagesSendEmailConfig message = new MessagesSendEmailConfig();
-        message.activatedAccountMessage(existingUser.getName());
-        EmailModel welcomeEmail = new EmailModel(message.getName(), existingUser.getEmail(), message.getSubject(),
-                message.getText());
-        emailService.sendEmail(welcomeEmail);
-        return ResponseEntity.ok("Parabéns! Sua conta foi validada e você já pode fazer login no sistema.");
+        UserModel existingUser = userRepository.findById(userId).get();
+        if (existingUser.getValidByAdmin()) {
+            
+            existingUser.setValid(true);
+            existingUser.setUpdated(updateTime);
+            userRepository.save(existingUser);
+            MessagesSendEmail message = new MessagesSendEmail();
+            message.activatedAccountMessage(existingUser.getName());
+            SendEmail welcomeEmail = new SendEmail(message.getName(), existingUser.getEmail(), message.getSubject(),
+                    message.getText());
+            emailService.sendEmail(welcomeEmail);
+            return ResponseEntity.ok("Parabéns! Sua conta foi validada e você já pode fazer login no sistema.");
+        
+        }
+        return ResponseEntity.ok("Deslcupe! Infelizmente sua conta foi desativada. Para mais informações, entre em contato com o suporte da empresa.");
     }
 }

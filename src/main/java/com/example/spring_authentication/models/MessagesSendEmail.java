@@ -1,4 +1,4 @@
-package com.example.spring_authentication.config;
+package com.example.spring_authentication.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessagesSendEmailConfig {
+public class MessagesSendEmail {
     private String subject;
     private String name;
     private String text;
@@ -22,7 +22,7 @@ public class MessagesSendEmailConfig {
                 "\n" + this.link+
                 "\n\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
                 "\n\nAtenciosamente,"+
-                "\nEmpresa.";
+                "\nSuporte Empresa.";
         return this.text;
     }
     
@@ -33,7 +33,7 @@ public class MessagesSendEmailConfig {
                 "\nAgora você pode fazer login e desfrutar do que há de melhor no nosso sistema."+
                 "\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
                 "\n\nAtenciosamente,"+
-                "Empresa.";
+                "\nSuporte Empresa.";
         return this.text;
     }
 
@@ -43,7 +43,7 @@ public class MessagesSendEmailConfig {
         this.text = "Olá, " + this.name + "! Sua conta foi desativada no sistema." +
                 "\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
                 "\n\nAtenciosamente,"+
-                "Empresa.";
+                "\nSuporte Empresa.";
         return this.text;
     }
 }

@@ -5,17 +5,13 @@ import java.time.LocalDateTime;
 import com.example.spring_authentication.enums.StatusEmail;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Data;
 
-@Table(name = "Email")
 @Data
-@Entity
-public class EmailModel {
+public class SendEmail {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String email_id;
@@ -32,7 +28,7 @@ public class EmailModel {
     private LocalDateTime sendDateEmail;
     private StatusEmail statusEmail;
 
-    public EmailModel(String ownerRef, String emailTo, String subject, String text) {
+    public SendEmail(String ownerRef, String emailTo, String subject, String text) {
         this.ownerRef = ownerRef;
         this.emailFrom = "{spring.mail.username}";
         this.emailTo = emailTo;

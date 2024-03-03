@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String usuario_id;
@@ -49,13 +49,16 @@ public class User implements UserDetails {
     @Column(name = "valid")
     private boolean valid = false;
 
+    @Column(name = "validByAdmin")
+    private boolean validByAdmin = true;
+
     @Column(name = "created")
     private LocalDateTime created = LocalDateTime.now();
 
     @Column(name = "updated")
     private LocalDateTime updated;
 
-    public User(String username, String email, String password) {
+    public UserModel(String username, String email, String password) {
         this.name = username;
         this.email = email;
         this.password = password;
@@ -68,6 +71,14 @@ public class User implements UserDetails {
 
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    public boolean getValidByAdmin() {
+        return validByAdmin;
+    }
+
+    public void setValidByAdmin(boolean validByAdmin) {
+        this.validByAdmin = validByAdmin;
     }
 
     @Override

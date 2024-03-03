@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spring_authentication.enums.Role;
-import com.example.spring_authentication.models.User;
+import com.example.spring_authentication.models.UserModel;
 import com.example.spring_authentication.repositories.UserRepository;
 
 @RestController
@@ -21,12 +21,12 @@ public class HomeController {
     @Autowired
     private UserRepository userRepository;
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @GetMapping("/home/{userId}")
     public ResponseEntity home(@PathVariable String userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<UserModel> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
-            User user = userOptional.get();
+            UserModel user = userOptional.get();
             if (user.getRole() == Role.USER) {
                 return ResponseEntity.status(HttpStatus.OK).body("Bem-vindo, " + user.getName() + "!"+
                 "\n" + "Você tem permissão de USER");

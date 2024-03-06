@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.spring_authentication.models.SendEmail;
 import com.example.spring_authentication.models.MessagesSendEmail;
+import com.example.spring_authentication.models.SendEmail;
 import com.example.spring_authentication.models.UserModel;
 import com.example.spring_authentication.repositories.UserRepository;
 import com.example.spring_authentication.services.EmailService;
@@ -67,7 +67,6 @@ public class UserController {
 
     @GetMapping("/detail/{userId}")
     public UserModel getOneUser(@PathVariable String userId) {
-        @SuppressWarnings("null")
         Optional<UserModel> user = userRepository.findById(userId);
         if (user.isPresent()) {
             return user.get();
@@ -76,7 +75,6 @@ public class UserController {
         }
     }
 
-    @SuppressWarnings("null")
     @PatchMapping("/update/by-user/{userId}")
     public UserModel updateUserByUser(@PathVariable String userId, @RequestBody UserModel newUser) {
         Optional<UserModel> user = userRepository.findById(userId);
@@ -93,7 +91,6 @@ public class UserController {
         }
     }
 
-    @SuppressWarnings("null")
     @PatchMapping("/update/by-admin/{userId}")
     public UserModel updateUserByAdmin(@PathVariable String userId, @RequestBody UserModel newUser) {
         Optional<UserModel> user = userRepository.findById(userId);

@@ -76,7 +76,6 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 
-    @SuppressWarnings("null")
     @GetMapping("/update/user/validate/{userId}")
     public ResponseEntity<String> patchValidateUser(@PathVariable String userId) {
         LocalDateTime updateTime = LocalDateTime.now();

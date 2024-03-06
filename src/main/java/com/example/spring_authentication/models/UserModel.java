@@ -86,7 +86,7 @@ public class UserModel implements UserDetails {
 
         if (this.role == Role.ADMIN) {
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+                    new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else if (this.role == Role.USER) {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_USER"));

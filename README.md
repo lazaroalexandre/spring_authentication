@@ -69,3 +69,8 @@
 - ## Jsons para a branche feat/auth-with-password
 
     endpoints-insominia/auth-with-password&confirm-email.json
+
+
+# Diagrama de Caso de Uso
+
+![alt](prd/Diagrama_Caso_Uso.png)

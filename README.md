@@ -58,4 +58,14 @@
     [WINDOWS] Execute o comando para rodar o projeto no windows:
 
     ./mvnw spring-boot:run
-    
+
+
+# Endpoints fora do e-mail
+
+- ## Jsons para a branche feat/auth-without-password
+
+    endpoints-insominia/auth-without-password&confirm-email.json
+
+- ## Jsons para a branche feat/auth-with-password
+
+    endpoints-insominia/auth-with-password&confirm-email.json

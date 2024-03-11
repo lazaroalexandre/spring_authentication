@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/user/detail/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.PATCH, "/user/update/by-user/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.PATCH, "/user/update/by-admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/user/update/invalid/by-user/**").hasAnyRole("USER")
 
                 )
                 .addFilterBefore(securityFilterConfig, UsernamePasswordAuthenticationFilter.class)

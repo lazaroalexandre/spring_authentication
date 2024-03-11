@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spring_authentication.models.SendEmail;
+import com.example.spring_authentication.enums.Role;
 import com.example.spring_authentication.models.MessagesSendEmail;
 import com.example.spring_authentication.models.UserModel;
 import com.example.spring_authentication.repositories.UserRepository;
@@ -126,6 +127,31 @@ public class UserController {
                 existingUser.setUpdated(updateTime);
             }
             return userRepository.save(existingUser);
+        } else {
+            throw new RuntimeException("Usuário não existe!");
+        }
+    }
+
+    @SuppressWarnings("null")
+    @PatchMapping("/update/invalid/by-user/{userId}")
+    public UserModel updateCancelAccountByUser(@PathVariable String userId) {
+        Optional<UserModel> user = userRepository.findById(userId);
+        LocalDateTime updateTime = LocalDateTime.now();
+        MessagesSendEmail message = new MessagesSendEmail();
+        if (user.isPresent()) {
+            UserModel existingUser = user.get();
+            if (existingUser.getRole() == Role.USER) {         
+                existingUser.setValid(false);
+                existingUser.setUpdated(updateTime);
+                existingUser.setValidByAdmin(false);
+                message.disabledAccountMessage(existingUser.getName());
+                SendEmail welcomeEmail = new SendEmail(message.getName(), existingUser.getEmail(),
+                        message.getSubject(),
+                        message.getText());
+                emailService.sendEmail(welcomeEmail);
+                return userRepository.save(existingUser);
+            }
+            throw new RuntimeException("Permissão negada!"); 
         } else {
             throw new RuntimeException("Usuário não existe!");
         }

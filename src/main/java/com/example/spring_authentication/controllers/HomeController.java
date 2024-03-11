@@ -21,7 +21,7 @@ public class HomeController {
     @Autowired
     private UserRepository userRepository;
 
-    @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings({ "rawtypes", "null" })
     @GetMapping("/home/{userId}")
     public ResponseEntity home(@PathVariable String userId) {
         Optional<UserModel> userOptional = userRepository.findById(userId);

@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.spring_authentication.enums.Role;
 import com.example.spring_authentication.models.MessagesSendEmail;
 import com.example.spring_authentication.models.SendEmail;
 import com.example.spring_authentication.models.UserModel;
@@ -65,6 +67,7 @@ public class UserController {
     @Autowired
     private EmailService emailService;
 
+    @SuppressWarnings("null")
     @GetMapping("/detail/{userId}")
     public UserModel getOneUser(@PathVariable String userId) {
         Optional<UserModel> user = userRepository.findById(userId);
@@ -75,6 +78,7 @@ public class UserController {
         }
     }
 
+    @SuppressWarnings("null")
     @PatchMapping("/update/by-user/{userId}")
     public UserModel updateUserByUser(@PathVariable String userId, @RequestBody UserModel newUser) {
         Optional<UserModel> user = userRepository.findById(userId);
@@ -83,6 +87,12 @@ public class UserController {
             UserModel existingUser = user.get();
             if (newUser.getName() != null) {
                 existingUser.setName(newUser.getName());
+            }
+            if (newUser.getPassword() != null) {
+                String encryptedPassword = new BCryptPasswordEncoder().encode(newUser.getPassword());
+                existingUser.setPassword(encryptedPassword);
+            }
+            if (newUser.getName() != null || newUser.getPassword() != null) {
                 existingUser.setUpdated(updateTime);
             }
             return userRepository.save(existingUser);
@@ -91,6 +101,7 @@ public class UserController {
         }
     }
 
+    @SuppressWarnings("null")
     @PatchMapping("/update/by-admin/{userId}")
     public UserModel updateUserByAdmin(@PathVariable String userId, @RequestBody UserModel newUser) {
         Optional<UserModel> user = userRepository.findById(userId);
@@ -104,10 +115,12 @@ public class UserController {
 
             if (newUser.getValidByAdmin() || !newUser.getValidByAdmin()) {
                 MessagesSendEmail message = new MessagesSendEmail();
-                if (newUser.getValid()) {
+                if (newUser.getValidByAdmin()) {
+                    existingUser.setValidByAdmin(true);
                     existingUser.setValid(true);
                     message.activatedAccountMessage(existingUser.getName());
                 } else {
+                    existingUser.setValidByAdmin(false);
                     existingUser.setValid(false);
                     message.disabledAccountMessage(existingUser.getName());
                 }
@@ -117,10 +130,35 @@ public class UserController {
                 emailService.sendEmail(welcomeEmail);
             }
 
-            if (newUser.getRole() != null || (newUser.getValid() || !newUser.getValid())) {
+            if (newUser.getRole() != null || (newUser.getValidByAdmin() || !newUser.getValidByAdmin())) {
                 existingUser.setUpdated(updateTime);
             }
             return userRepository.save(existingUser);
+        } else {
+            throw new RuntimeException("Usuário não existe!");
+        }
+    }
+
+    @SuppressWarnings("null")
+    @PatchMapping("/update/invalid/by-user/{userId}")
+    public UserModel updateCancelAccountByUser(@PathVariable String userId) {
+        Optional<UserModel> user = userRepository.findById(userId);
+        LocalDateTime updateTime = LocalDateTime.now();
+        MessagesSendEmail message = new MessagesSendEmail();
+        if (user.isPresent()) {
+            UserModel existingUser = user.get();
+            if (existingUser.getRole() == Role.USER) {         
+                existingUser.setValid(false);
+                existingUser.setUpdated(updateTime);
+                existingUser.setValidByAdmin(false);
+                message.disabledAccountMessage(existingUser.getName());
+                SendEmail welcomeEmail = new SendEmail(message.getName(), existingUser.getEmail(),
+                        message.getSubject(),
+                        message.getText());
+                emailService.sendEmail(welcomeEmail);
+                return userRepository.save(existingUser);
+            }
+            throw new RuntimeException("Permissão negada!"); 
         } else {
             throw new RuntimeException("Usuário não existe!");
         }

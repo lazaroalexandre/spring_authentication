@@ -30,6 +30,8 @@ public class SecurityConfig {
                         
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/forget/password/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/update/valid/pending/password/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/update/user/validate/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/user/list").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/user/list/invalid").hasAnyRole("ADMIN")
@@ -38,7 +40,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/user/detail/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.PATCH, "/user/update/by-user/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(HttpMethod.PATCH, "/user/update/by-admin/**").hasAnyRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.PATCH, "/auth/update/password/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/user/update/invalid/by-user/**").hasAnyRole("USER")
                 )
                 .addFilterBefore(securityFilterConfig, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -53,6 +53,9 @@ public class UserModel implements UserDetails {
     @Column(name = "validByAdmin")
     private boolean validByAdmin = true;
 
+    @Column(name = "pendingPassword")
+    private boolean pendingPassword = false;
+
     @Column(name = "created")
     private LocalDateTime created = LocalDateTime.now();
 
@@ -82,12 +85,21 @@ public class UserModel implements UserDetails {
         this.validByAdmin = validByAdmin;
     }
 
+    public boolean getPendingPassword() {
+        return pendingPassword;
+    }
+
+    public void pendingPassword(boolean pendingPassword) {
+        this.pendingPassword = pendingPassword;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         if (this.role == Role.ADMIN) {
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+                    new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else if (this.role == Role.USER) {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_USER"));
@@ -119,6 +131,11 @@ public class UserModel implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return usuario_id;
     }
 
 }

@@ -25,6 +25,19 @@ public class MessagesSendEmail {
                 "\nSuporte Empresa.";
         return this.text;
     }
+
+    public String activatedPendingPassword(String link, String name) {
+        this.subject = "Senha pendente no nosso sistema!";
+        this.link = link;
+        this.name = name;
+        this.text = "Olá, " + this.name + "! Sua conta troca de senha pendente." +
+                "\nClique no link abaixo para poder trocar de senha:"+
+                "\n" + this.link+
+                "\n\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
+                "\n\nAtenciosamente,"+
+                "\nSuporte Empresa.";
+        return this.text;
+    }
     
     public String activatedAccountMessage(String name) {
         this.subject = "Conta ativada no sistema!";
@@ -41,6 +54,16 @@ public class MessagesSendEmail {
         this.subject = "Conta desativada no sistema!";
         this.name = name;
         this.text = "Olá, " + this.name + "! Sua conta foi desativada no sistema." +
+                "\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
+                "\n\nAtenciosamente,"+
+                "\nSuporte Empresa.";
+        return this.text;
+    }
+
+    public String updatePasswordMessage(String name) {
+        this.subject = "Sucesso ao alterar a senha no sistema!";
+        this.name = name;
+        this.text = "Olá, " + this.name + "! Sua senha foi alterada com sucesso no nosso sistema." +
                 "\nCaso tenha alguma dúvida, sinta-se a vontade para nos enviar."+
                 "\n\nAtenciosamente,"+
                 "\nSuporte Empresa.";

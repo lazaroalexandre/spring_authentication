@@ -60,3 +60,8 @@
 
     ./mvnw spring-boot:run
     
+
+
+# Endpoints fora do e-mail
+
+    endpoints-insominia/auth-with-password&confirm-email.json

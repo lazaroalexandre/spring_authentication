@@ -59,3 +59,7 @@
 
     ./mvnw spring-boot:run
     
+
+# Endpoints fora do e-mail
+
+    endpoints-insominia/auth-without-password&confirm-email.json

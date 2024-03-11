@@ -107,10 +107,12 @@ public class UserController {
 
             if (newUser.getValidByAdmin() || !newUser.getValidByAdmin()) {
                 MessagesSendEmail message = new MessagesSendEmail();
-                if (newUser.getValid()) {
+                if (newUser.getValidByAdmin()) {
+                    existingUser.setValidByAdmin(true);
                     existingUser.setValid(true);
                     message.activatedAccountMessage(existingUser.getName());
                 } else {
+                    existingUser.setValidByAdmin(false);
                     existingUser.setValid(false);
                     message.disabledAccountMessage(existingUser.getName());
                 }
@@ -120,7 +122,7 @@ public class UserController {
                 emailService.sendEmail(welcomeEmail);
             }
 
-            if (newUser.getRole() != null || (newUser.getValid() || !newUser.getValid())) {
+            if (newUser.getRole() != null || (newUser.getValidByAdmin() || !newUser.getValidByAdmin())) {
                 existingUser.setUpdated(updateTime);
             }
             return userRepository.save(existingUser);

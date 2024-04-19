@@ -8,7 +8,6 @@
     Spring - Java
     Postgres - SQL
 
-
 # Configurações em localhost
 
     - Instale o Maven na sua máquina;
@@ -20,7 +19,6 @@
     na chave secreta para qualquer palavra que você achar secreta;
     - No arquivo "application.properties", altere o seu username e password nas confirgurações de smtp. Veja como adicionar a senha correta do seu e-mail 
     de envio escolhido: https://support.google.com/accounts/answer/185833
-
 
 # Dependências implantadas
 
@@ -34,32 +32,26 @@
     Validation
     Java JWT
 
-
 # Execução
 
     [LINUX] Execute o comando para limpar e reconstruir o projeto spring no linux:
 
     mvn clean package
-    mvn dependency:tree
-
     
     [LINUX] Execute o comando para rodar o projeto no linux:
 
     mvn spring-boot:run
         
-
+    -----------------------------------------------------------------------------------
 
     [WINDOWS] Execute o comando para limpar e reconstruir o projeto spring no windows:
     
     ./mvnw clean package
-    ./mvnw dependency:tree
-
     
     [WINDOWS] Execute o comando para rodar o projeto no windows:
 
     ./mvnw spring-boot:run
     
-
 # Endpoints fora do e-mail
 
     endpoints-insominia/auth-without-password&confirm-email.json

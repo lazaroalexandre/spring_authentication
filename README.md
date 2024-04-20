@@ -71,3 +71,5 @@
 
 # Modelo Lógico de Banco de dados
 
+![alt](images/Diagrama%20Láogico%20de%20Banco%20de%20Dados.png)
+

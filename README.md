@@ -10,7 +10,6 @@
     Spring - Java
     Postgres - SQL
 
-
 # Configurações em localhost
 
     - Instale o Maven na sua máquina;
@@ -40,25 +39,20 @@
     [LINUX] Execute o comando para limpar e reconstruir o projeto spring no linux:
 
     mvn clean package
-    mvn dependency:tree
-
     
     [LINUX] Execute o comando para rodar o projeto no linux:
 
     mvn spring-boot:run
-        
 
+    -----------------------------------------------------------------------------------
 
     [WINDOWS] Execute o comando para limpar e reconstruir o projeto spring no windows:
     
     ./mvnw clean package
-    ./mvnw dependency:tree
-
     
     [WINDOWS] Execute o comando para rodar o projeto no windows:
 
     ./mvnw spring-boot:run
-
 
 # Endpoints fora do e-mail
 
@@ -73,4 +67,7 @@
 
 # Diagrama de Caso de Uso
 
-![alt](prd/Diagrama_Caso_Uso.png)
+![alt](images/Diagrama%20de%20Caso%20de%20Uso.png)
+
+# Modelo Lógico de Banco de dados
+

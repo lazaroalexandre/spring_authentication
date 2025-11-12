@@ -6,7 +6,7 @@ Essa branch corresponde ao login de usuário com e-mail e senha.
 ## Tecnologias usadas
 
 - Spring - Java
-- Postgres - SQL
+- PostgreSQL - SQL
 
 ## Configurações em localhost
 

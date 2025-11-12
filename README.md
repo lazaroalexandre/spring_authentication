@@ -8,7 +8,7 @@ Já a branch chamada "feat/auth-without-password" corresponde ao login de usuár
 ## Tecnologias usadas
 
 - Spring - Java
-- Postgres - SQL
+- PostgreSQL - SQL
 
 ## Configurações em localhost
 

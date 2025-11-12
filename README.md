@@ -38,6 +38,6 @@ Execute o comando para limpar e reconstruir o projeto spring:
 Execute o comando para rodar o projeto:
 - mvn spring-boot:run
     
-# Endpoints
+## Endpoints
 
 endpoints-insominia/auth-with-password&confirm-email.json

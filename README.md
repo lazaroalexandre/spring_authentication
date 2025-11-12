@@ -1,4 +1,4 @@
-# Spring Authentication
+# Spring Boot Authentication
 
 Aplicação web de registro e login de usuários, usando o jwt e confirmação de e-mails no gmail.
 Existe 2(duas) branches, além dessa main, que correspondem a diferentes formas de autencação de usuário.
